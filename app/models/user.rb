@@ -34,4 +34,8 @@ class User < ApplicationRecord
   has_many :receiver_connections, foreign_key: :receiver_id, class_name: :Connection
 
   validates :username, :email, presence: true
+
+  def user_feed(range: nil, instruments: nil, genres: nil)
+    RecommendedUsersService.new(user: self, range: range, instruments: instruments, genres: genres).get_recommendation
+  end
 end
