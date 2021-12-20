@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  resources :requests
-  resources :rejections
-  resources :messages
   resources :notifications
   resources :tags
   resources :connections
