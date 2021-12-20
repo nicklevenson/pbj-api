@@ -1,0 +1,2 @@
+class RejectionsController < ApplicationController
+end
