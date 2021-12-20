@@ -22,4 +22,15 @@
 #
 
 class User < ApplicationRecord
+  has_many :user_tags, dependent: :destroy
+  has_many :tags, through: :user_tags
+  has_many :notifications, dependent: :destroy
+  has_many :connections
+  has_many :social_links
+
+  validates :username, :email, presence: true
+
+
+
+
 end

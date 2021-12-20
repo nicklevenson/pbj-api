@@ -16,8 +16,9 @@ ActiveRecord::Schema.define(version: 2021_12_20_011951) do
   enable_extension "plpgsql"
 
   create_table "connections", force: :cascade do |t|
-    t.integer "connection_a_id"
-    t.integer "connection_b_id"
+    t.integer "requestor_id"
+    t.integer "receiver_id"
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -31,29 +32,10 @@ ActiveRecord::Schema.define(version: 2021_12_20_011951) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "rejections", force: :cascade do |t|
-    t.integer "rejector_id"
-    t.integer "rejected_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "requests", force: :cascade do |t|
-    t.integer "requestor_id"
-    t.integer "receiver_id"
-    t.boolean "accepted", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "social_links", force: :cascade do |t|
     t.integer "user_id"
-    t.string "soundcloud_link"
-    t.string "bandcamp_link"
-    t.string "youtube_link"
-    t.string "spotify_link"
-    t.string "apple_music_link"
-    t.string "instagram_link"
+    t.integer "type"
+    t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
