@@ -22,15 +22,15 @@
 #
 
 class User < ApplicationRecord
+  include ConnectionsModule
+
   has_many :user_tags, dependent: :destroy
   has_many :tags, through: :user_tags
   has_many :notifications, dependent: :destroy
-  has_many :connections
   has_many :social_links
 
+  has_many :a_connected_users, foreign_key: :requestor_id, class_name: :Connection
+  has_many :b_connected_users, foreign_key: :receiver_id, class_name: :Connection
+
   validates :username, :email, presence: true
-
-
-
-
 end

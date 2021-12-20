@@ -1,0 +1,23 @@
+module ConnectionsModule
+  def connected_users
+    connections = Connection.where('requestor_id = ? OR receiver_id = ?', id, id).accepted
+
+    user_ids = connections.map do |c|
+      c.receiver_id == id ? c.requestor_id : c.receiver_id
+    end
+
+    User.where(id: user_ids)
+  end
+
+  def incoming_connections
+    connection_ids = Connection.where(receiver_id: id).pending.pluck(:requestor_id)
+
+    User.where(id: connection_ids)
+  end
+
+  def pending_connections
+    connection_ids = Connection.where(requestor_id: id).pending.pluck(:receiver_id)
+
+    User.where(id: connection_ids)
+  end
+end
