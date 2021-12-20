@@ -29,8 +29,8 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :social_links
 
-  has_many :a_connected_users, foreign_key: :requestor_id, class_name: :Connection
-  has_many :b_connected_users, foreign_key: :receiver_id, class_name: :Connection
+  has_many :requestor_connections, foreign_key: :requestor_id, class_name: :Connection
+  has_many :receiver_connections, foreign_key: :receiver_id, class_name: :Connection
 
   validates :username, :email, presence: true
 end
