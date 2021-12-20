@@ -25,7 +25,22 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'connection module' do
+    before do
+      @user1 = create(:user)
+      @user2 = create(:user)
+      @user3 = create(:user)
+    end
+
     describe '#connected users' do
+      before do
+        Connection.create!(requestor: @user1, receiver: @user2, status: 1)
+        Connection.create!(requestor: @user1, receiver: @user3, status: 0)
+      end
+
+      it 'returns a list of connected users' do
+        expect(@user1.connected_users).to eq([@user2])
+        expect(@user2.connected_users).to eq([@user1])
+      end
     end
 
     describe '#incoming connections' do
