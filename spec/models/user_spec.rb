@@ -29,14 +29,12 @@ RSpec.describe User, type: :model do
       @user1 = create(:user)
       @user2 = create(:user)
       @user3 = create(:user)
+
+      Connection.create!(requestor: @user1, receiver: @user2, status: 1)
+      Connection.create!(requestor: @user1, receiver: @user3, status: 0)
     end
 
     describe '#connected users' do
-      before do
-        Connection.create!(requestor: @user1, receiver: @user2, status: 1)
-        Connection.create!(requestor: @user1, receiver: @user3, status: 0)
-      end
-
       it 'returns a list of connected users' do
         expect(@user1.connected_users).to eq([@user2])
         expect(@user2.connected_users).to eq([@user1])
@@ -44,9 +42,31 @@ RSpec.describe User, type: :model do
     end
 
     describe '#incoming connections' do
+      it 'returns a list of a users incoming connection requests' do
+        expect(@user3.incoming_connections).to eq([@user1])
+      end
     end
 
     describe '#pending connections' do
+      it 'returns a list of a users pending outgoing connections' do
+        expect(@user1.pending_connections).to eq([@user3])
+      end
+    end
+
+    describe '#users_not_connected_broad' do
+      it 'returns a list of users not connected including users with pending requests' do
+        expect(@user2.users_not_connected_broad).to eq([@user3])
+        expect(@user3.users_not_connected_broad).to include(@user2, @user1)
+        expect(@user1.users_not_connected_broad).to eq([@user3])
+      end
+    end
+
+    describe '#users_not_connected_strict' do
+      it 'returns a list of users not connected exluding users with pending requests' do
+        expect(@user2.users_not_connected_strict).to eq([@user3])
+        expect(@user3.users_not_connected_strict).to eq([@user2])
+        expect(@user1.users_not_connected_strict).to eq([])
+      end
     end
   end
 end
