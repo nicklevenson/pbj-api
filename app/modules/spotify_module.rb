@@ -1,4 +1,4 @@
-class SpotifyService
+module SpotifyModule
   def fetch_spotify_data
     if provider === 'spotify'
       refresh_spotify_token

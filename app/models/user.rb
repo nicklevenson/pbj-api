@@ -24,6 +24,7 @@
 class User < ApplicationRecord
   include ConnectionsModule
   include GeolocationModule
+  include SpotifyModule
   has_many :user_tags, dependent: :destroy
   has_many :tags, through: :user_tags
   has_many :notifications, dependent: :destroy
