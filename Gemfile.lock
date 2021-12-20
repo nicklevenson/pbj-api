@@ -98,6 +98,8 @@ GEM
     erubi (1.10.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
+    faker (2.16.0)
+      i18n (>= 1.6, < 2)
     faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -252,6 +254,7 @@ DEPENDENCIES
   database_cleaner
   debug
   factory_bot
+  faker
   jwt
   omniauth
   omniauth-spotify
