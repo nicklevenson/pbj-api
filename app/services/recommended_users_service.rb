@@ -27,7 +27,10 @@ class RecommendedUsersService
   end
 
   def filter_by_range
-    @assorted_users = @user.users_in_range(@assorted_users, range) if @range
+    if @range
+      ids_in_range =  @user.users_in_range(@assorted_users, range)
+      @assorted_users = @assorted_users.where(id: ids_in_range)
+    end
   end
 
   def filter_by_genres
@@ -44,6 +47,7 @@ class RecommendedUsersService
 
   def order_by_similarity
     conn = ActiveRecord::Base
+    user_ids = @assorted_users.try(:ids) ? @assorted_users.ids : nil
     sql = <<~SQL
       SELECT u.*, COALESCE(matching_tag_counts.n, 0) AS similarity_score
       FROM users AS u
@@ -53,7 +57,7 @@ class RecommendedUsersService
           WHERE #{conn.sanitize_sql_array(['tag_id IN(?)', @user.tag_ids])}
           GROUP BY user_id
         ) AS matching_tag_counts ON u.id=matching_tag_counts.user_id
-        WHERE #{conn.sanitize_sql_array(['id IN(?)', @assorted_users.ids])}
+        WHERE #{conn.sanitize_sql_array(['id IN(?)', user_ids])}
         ORDER BY similarity_score DESC
         LIMIT 1000
     SQL

@@ -15,4 +15,12 @@
 class Tag < ApplicationRecord
   has_many :usertags, dependent: :destroy
   has_many :users, through: :usertags
+
+  KIND_MAPPINGS = {
+    generic: 0,
+    genre: 1,
+    instrument: 2
+  }
+
+  KIND_LOOKUP = KIND_MAPPINGS.invert
 end
