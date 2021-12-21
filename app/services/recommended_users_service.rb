@@ -12,8 +12,7 @@ class RecommendedUsersService
   def get_recommendation
     base_selection
     filter_by_range
-    filter_by_genres
-    filter_by_instruments
+    apply_genre_instrument_filters
     order_by_similarity
   end
 
@@ -33,15 +32,25 @@ class RecommendedUsersService
     end
   end
 
+  def apply_genre_instrument_filters
+    if @genres || @instruments
+      @assorted_users = @assorted_users.where(id: (filter_by_genres + filter_by_instruments).uniq)
+    end
+  end
+
   def filter_by_genres
     if @genres
-
+      @assorted_users.where(id: UserTag.where(tag: Tag.genre.where(name: @genres)).pluck(:user_id))
+    else
+      []
     end
   end
 
   def filter_by_instruments
     if @instruments
-
+      @assorted_users.where(id: UserTag.where(tag: Tag.instrument.where(name: @instruments)).pluck(:user_id))
+    else
+      []
     end
   end
 

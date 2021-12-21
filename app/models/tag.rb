@@ -23,4 +23,8 @@ class Tag < ApplicationRecord
   }
 
   KIND_LOOKUP = KIND_MAPPINGS.invert
+
+  scope :generic, -> { where(kind: KIND_MAPPINGS[:generic]) }
+  scope :genre, -> { where(kind: KIND_MAPPINGS[:genre]) }
+  scope :instrument, -> { where(kind: KIND_MAPPINGS[:instrument]) }
 end

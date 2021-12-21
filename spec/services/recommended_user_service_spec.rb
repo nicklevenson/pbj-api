@@ -34,9 +34,44 @@ RSpec.describe RecommendedUsersService, type: :service do
     end
 
     it 'returns a list of recommended users based on genre filters' do
+      tag = create(:tag, :genre)
+      @user1.tags << tag
+      @user3.tags << tag
+      result = RecommendedUsersService.new(user: @user1, genres: [tag.name]).get_recommendation
+      expect(result).to eq([@user3])
     end
 
     it 'returns a list of recommended users based on instrument filters' do
+      tag = create(:tag, :instrument)
+      @user1.tags << tag
+      @user3.tags << tag
+      result = RecommendedUsersService.new(user: @user1, instruments: [tag.name]).get_recommendation
+      expect(result).to eq([@user3])
+    end
+
+    it 'combines instrument and genre filters' do
+      tag = create(:tag, :genre)
+      @user1.tags << tag
+      @user3.tags << tag
+
+      result = RecommendedUsersService.new(user: @user1, genres: [tag.name], instruments: ['guitar']).get_recommendation
+      expect(result).to eq([@user3])
+
+      tag2 = create(:tag, :instrument)
+      @user1.tags << tag2
+      @user3.tags << tag2
+
+      result = RecommendedUsersService.new(user: @user1, genres: [tag.name],
+                                           instruments: [tag2.name]).get_recommendation
+      expect(result).to eq([@user3])
+
+      tag3 = create(:tag, :instrument)
+      @user1.tags << tag3
+      @user2.tags << tag3
+
+      result = RecommendedUsersService.new(user: @user1, genres: [tag.name],
+                                           instruments: [tag2.name, tag3.name]).get_recommendation
+      expect(result).to eq([@user3, @user2])
     end
   end
 end
