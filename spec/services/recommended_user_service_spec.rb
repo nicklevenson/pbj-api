@@ -49,7 +49,7 @@ RSpec.describe RecommendedUsersService, type: :service do
       expect(result).to eq([@user3])
     end
 
-    it 'combines instrument and genre filters' do
+    it 'combines instrument and genre filters and isnt too pointy when one does not yield result' do
       tag = create(:tag, :genre)
       @user1.tags << tag
       @user3.tags << tag
@@ -72,6 +72,14 @@ RSpec.describe RecommendedUsersService, type: :service do
       result = RecommendedUsersService.new(user: @user1, genres: [tag.name],
                                            instruments: [tag2.name, tag3.name]).get_recommendation
       expect(result).to eq([@user3, @user2])
+    end
+
+    it 'excludes users who are connected' do
+      Connection.create!(requestor: @user1, receiver: @user2, status: Connection::STATUS_MAPPINGS[:accepted])
+
+      result = RecommendedUsersService.new(user: @user1).get_recommendation
+
+      expect(result).to eq([@user3])
     end
   end
 end

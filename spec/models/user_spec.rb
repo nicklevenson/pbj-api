@@ -30,8 +30,8 @@ RSpec.describe User, type: :model do
       @user2 = create(:user)
       @user3 = create(:user)
 
-      Connection.create!(requestor: @user1, receiver: @user2, status: Connection::Status[:accepted])
-      Connection.create!(requestor: @user1, receiver: @user3, status: Connection::Status[:pending])
+      Connection.create!(requestor: @user1, receiver: @user2, status: Connection::STATUS_MAPPINGS[:accepted])
+      Connection.create!(requestor: @user1, receiver: @user3, status: Connection::STATUS_MAPPINGS[:pending])
     end
 
     describe '#connected users' do
