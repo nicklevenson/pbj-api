@@ -24,6 +24,13 @@ RSpec.describe RecommendedUsersService, type: :service do
     end
 
     it 'returns a list of recommended users based on a given proximity range' do
+      @user1.set_coords_and_location('Portland, OR')
+      @user2.set_coords_and_location('Beaverton, OR')
+      @user3.set_coords_and_location('San Diego')
+
+      result = RecommendedUsersService.new(user: @user1, range: 10).get_recommendation
+
+      expect(result).to eq([@user2])
     end
 
     it 'returns a list of recommended users based on genre filters' do

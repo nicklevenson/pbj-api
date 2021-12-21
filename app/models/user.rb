@@ -38,4 +38,12 @@ class User < ApplicationRecord
   def user_feed(range: nil, instruments: nil, genres: nil)
     RecommendedUsersService.new(user: self, range: range, instruments: instruments, genres: genres).get_recommendation
   end
+
+  def set_coords_and_location(location_name)
+    coords = GeocodingService.find_coords_with_city(location_name)
+    self.location = location_name
+    self.lat = coords[0]
+    self.lng = coords[1]
+    save
+  end
 end

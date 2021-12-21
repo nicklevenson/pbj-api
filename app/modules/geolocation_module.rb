@@ -5,7 +5,7 @@ module GeolocationModule
       lng1 = other_user.lng
       lat2 = lat
       lng2 = lng
-      Geocoding.get_distance_between(lat1, lng1, lat2, lng2)
+      GeocodingService.get_distance_between(lat1, lng1, lat2, lng2)
     else
       500
     end

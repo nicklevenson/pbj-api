@@ -28,7 +28,7 @@ class RecommendedUsersService
 
   def filter_by_range
     if @range
-      ids_in_range =  @user.users_in_range(@assorted_users, range)
+      ids_in_range =  @user.users_in_range(@assorted_users, @range)
       @assorted_users = @assorted_users.where(id: ids_in_range)
     end
   end
