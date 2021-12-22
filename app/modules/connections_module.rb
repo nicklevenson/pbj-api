@@ -6,13 +6,13 @@ module ConnectionsModule
       c.receiver_id == id ? c.requestor_id : c.receiver_id
     end
 
-    User.where(id: user_ids).where.not(id: id)
+    User.where(id: user_ids)
   end
 
   def incoming_connections
     connection_ids = receiver_connections.pending.pluck(:requestor_id)
 
-    User.where(id: connection_ids).where.not(id: id)
+    User.where(id: connection_ids)
   end
 
   def pending_connections
@@ -37,18 +37,14 @@ module ConnectionsModule
     User.where.not(id: ids).where.not(id: id)
   end
 
-  def request_connection(user_id)
-    if !connected_users.include?(User.find(user_id))
-      request = Request.find_or_create_by(requestor_id: id, receiver_id: user_id)
-      User.find(user_id).notifications << Notification.create(content: 'has requested to connect with you',
-                                                              involved_username: username, involved_user_id: id)
-      if request.save
-        true
-      else
-        false
-      end
+  def request_connection(receiving_user_id)
+    connection = Connection.find_by(receiver_id: receiving_user_id, requestor_id: id)
+
+    if connection
+      false
     else
-      'Already Connected'
+      Connection.create(receiver_id: receiving_user_id, requestor_id: id)
+      true
     end
   end
 
