@@ -35,6 +35,8 @@ class User < ApplicationRecord
 
   validates :username, :email, presence: true
 
+  after_create :new_user_notification
+
   def user_feed(range: nil, instruments: nil, genres: nil)
     RecommendedUsersService.new(user: self, range: range, instruments: instruments, genres: genres).get_recommendation
   end
@@ -55,5 +57,11 @@ class User < ApplicationRecord
                                   image_url: tag_attribute['image_url'], kind: Tag::KIND_MAPPINGS[:tag_attribute['kind'].to_sym])
       tags << tag unless tags.include?(tag)
     end
+  end
+
+  private
+
+  def new_user_notification
+    notifications << Notification.create(content: "Thanks for joining Matchup Music! We're excited to have you.")
   end
 end

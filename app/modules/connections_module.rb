@@ -44,6 +44,7 @@ module ConnectionsModule
       false
     else
       Connection.create(receiver_id: receiving_user_id, requestor_id: id)
+      request_notification(receiving_user_id)
       true
     end
   end
@@ -53,6 +54,7 @@ module ConnectionsModule
 
     if connection
       connection.update(status: Connection::STATUS_MAPPINGS[:accepted])
+      accepted_notification(requesting_user_id)
       true
     else
       false
@@ -68,5 +70,17 @@ module ConnectionsModule
     else
       false
     end
+  end
+
+  private
+
+  def request_notification(_receiving_user_id)
+    User.find(user_id).notifications << Notification.create(content: 'has requested to connect with you',
+                                                            involved_username: username, involved_user_id: id)
+  end
+
+  def accepted_notification(_requesting_user_id)
+    requested_user.notifications << Notification.create(content: 'has accepted your connection request',
+                                                        involved_username: username, involved_user_id: id)
   end
 end

@@ -68,5 +68,7 @@ RSpec.describe User, type: :model do
         expect(@user1.users_not_connected_strict).to eq([])
       end
     end
+
+    # #to do: request connection, accept and reject
   end
 end
