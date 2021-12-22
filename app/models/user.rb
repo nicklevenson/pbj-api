@@ -46,4 +46,14 @@ class User < ApplicationRecord
     self.lng = coords[1]
     save
   end
+
+  # nested helpers
+  def tags_attributes=(tags_attributes)
+    tags.delete_all
+    tags_attributes.each do |tag_attribute|
+      tag = Tag.find_or_create_by(name: tag_attribute['name'], link: tag_attribute['link'],
+                                  image_url: tag_attribute['image_url'], kind: Tag::KIND_MAPPINGS[:tag_attribute['kind'].to_sym])
+      tags << tag unless tags.include?(tag)
+    end
+  end
 end

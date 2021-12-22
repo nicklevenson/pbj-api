@@ -81,5 +81,13 @@ RSpec.describe RecommendedUsersService, type: :service do
 
       expect(result).to eq([@user3])
     end
+
+    it 'excludes rejected users' do
+      Connection.create!(requestor: @user2, receiver: @user1, status: Connection::STATUS_MAPPINGS[:rejected])
+
+      result = RecommendedUsersService.new(user: @user1).get_recommendation
+
+      expect(result).to eq([@user3])
+    end
   end
 end
