@@ -75,11 +75,12 @@ module ConnectionsModule
   private
 
   def request_notification(_receiving_user_id)
-    User.find(user_id).notifications << Notification.create(content: 'has requested to connect with you',
-                                                            involved_username: username, involved_user_id: id)
+    User.find(_receiving_user_id).notifications << Notification.create(content: 'has requested to connect with you',
+                                                                       involved_username: username, involved_user_id: id)
   end
 
   def accepted_notification(_requesting_user_id)
+    requested_user = User.find(_requesting_user_id)
     requested_user.notifications << Notification.create(content: 'has accepted your connection request',
                                                         involved_username: username, involved_user_id: id)
   end
