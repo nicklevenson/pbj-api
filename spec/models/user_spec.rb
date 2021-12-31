@@ -34,20 +34,20 @@ RSpec.describe User, type: :model do
       Connection.create!(requestor: @user1, receiver: @user3, status: Connection::STATUS_MAPPINGS[:pending])
     end
 
-    describe '#connected users' do
+    describe '#connected_users' do
       it 'returns a list of connected users' do
         expect(@user1.connected_users).to eq([@user2])
         expect(@user2.connected_users).to eq([@user1])
       end
     end
 
-    describe '#incoming connections' do
+    describe '#incoming_connections' do
       it 'returns a list of a users incoming connection requests' do
         expect(@user3.incoming_connections).to eq([@user1])
       end
     end
 
-    describe '#pending connections' do
+    describe '#pending_connections' do
       it 'returns a list of a users pending outgoing connections' do
         expect(@user1.pending_connections).to eq([@user3])
       end
@@ -69,6 +69,48 @@ RSpec.describe User, type: :model do
       end
     end
 
-    # #to do: request connection, accept and reject
+    describe 'request, accept, reject' do
+      before do
+        Connection.all.destroy_all
+        @user1.request_connection(@user2.id)
+      end
+
+      describe '#request_connection' do
+        it 'requests a connection to another user' do
+          expect(@user2.incoming_connections).to eq([@user1])
+          expect(@user1.pending_connections).to eq([@user2])
+        end
+
+        it 'creates a notification for the receiving user' do
+          expect(@user2.notifications.first).to have_attributes(content: 'has requested to connect with you',
+                                                                involved_user_id: @user1.id)
+        end
+      end
+
+      describe '#accept_incoming_connection' do
+        before do
+          @user2.accept_incoming_connection(@user1.id)
+        end
+
+        it 'accepts an incoming connection' do
+          expect(@user2.connected_users).to eq([@user1])
+          expect(@user1.connected_users).to eq([@user2])
+        end
+
+        it 'creates a notification for the requesting user' do
+          expect(@user1.notifications.first).to have_attributes(content: 'has accepted your connection request',
+                                                                involved_user_id: @user2.id)
+        end
+      end
+
+      describe '#reject_incoming_connection' do
+        it 'rejects an incoming request' do
+          @user2.reject_incoming_connection(@user1.id)
+
+          expect(@user2.rejected_connections).to eq([@user1])
+          expect(@user2.user_feed).to eq([@user3])
+        end
+      end
+    end
   end
 end

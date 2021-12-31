@@ -13,7 +13,7 @@
 
 class Notification < ApplicationRecord
   belongs_to :user
-
+  belongs_to :involved_user, class_name: :User
   # after_create :user_email
 
   def self.make_read(ids)
@@ -24,8 +24,6 @@ class Notification < ApplicationRecord
 
   def user_email
     user = self.user
-    if user.email_subscribe
-      UserMailer.with(user: user, notification: self).notification_email.deliver_later
-    end
+    UserMailer.with(user: user, notification: self).notification_email.deliver_later if user.email_subscribe
   end
 end
