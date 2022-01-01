@@ -12,8 +12,7 @@ gem 'pg', '~> 1.1'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 5.0'
 
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-# gem "jbuilder"
+gem 'active_model_serializers', '~> 0.8.0'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
