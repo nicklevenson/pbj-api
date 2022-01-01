@@ -11,9 +11,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: MultiJson.dump(@user, except: %i[token refresh_token],
-                                       methods: %i[connected_users outgoing_pending_requests],
-                                       include: [tags: { except: %i[created_at updated_at] }, genres: { only: :name }, instruments: { only: :name }])
+    render json: @user
   end
 
   def create

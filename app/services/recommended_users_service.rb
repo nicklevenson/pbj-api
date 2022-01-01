@@ -71,6 +71,6 @@ class RecommendedUsersService
         LIMIT 1000
     SQL
 
-    @assorted_users = User.find_by_sql(sql)
+    @assorted_users = User.from("(#{sql}) users")
   end
 end
