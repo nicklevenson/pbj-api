@@ -37,7 +37,7 @@ class User < ApplicationRecord
 
   after_create :new_user_notification
 
-  def user_feed(range: nil, instruments: nil, genres: nil)
+  def user_feed(range = nil, instruments = nil, genres = nil)
     RecommendedUsersService.new(user: self, range: range, instruments: instruments, genres: genres).get_recommendation
   end
 

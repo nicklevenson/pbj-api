@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authorized, except: %i[index create show unsubscribe_to_email]
+  # before_action :authorized, except: %i[index create show unsubscribe_to_email]
   before_action :set_user, except: %i[index create]
 
   # GET /users
@@ -73,25 +73,13 @@ class UsersController < ApplicationController
     render json: MultiJson.dump(info)
   end
 
-  def get_connected_users
-    render json: MultiJson.dump(@user.connected_users, include: :tags)
-  end
-
   def get_recommended_users
-    recommendations = @user.recommended_users(recommended_users_params)
+    recommendations = @user.user_feed(params[:range], params[:instruments], params[:genres])
 
-    render json: MultiJson.dump(recommendations) if recommendations
-  end
-
-  def get_incoming_requests
-    render json: MultiJson.dump(@user.incoming_pending_requests)
-  end
-
-  def get_user_chatrooms
-    @user = User.includes(chatrooms: [{ userchatrooms: :user }, :users, { messages: :user }]).find(params[:id])
-    render json: MultiJson.dump(@user.chatrooms, include: [:users, { messages: {
-                                  include: [user: { only: %i[username id location photo providerImage] }]
-                                } }])
+    if recommendations
+      render json: ActiveModel::RecommendedUserSerializer.new(recommendations,
+                                                              each_serializer: RecommendedUserSerializer)
+    end
   end
 
   def get_user_notifications
@@ -154,10 +142,6 @@ class UsersController < ApplicationController
       tags_attributes: %i[name tag_type uri image_url link],
       genres_attributes: [:name], instruments_attributes: [:name]
     )
-  end
-
-  def recommended_users_params
-    params.require(:filterParamsObject).permit(:noFilter, :mileRange, { instruments: [] }, { genres: [] })
   end
 
   def auth
