@@ -61,7 +61,7 @@ class UsersController < ApplicationController
 
   def get_recommended_users
     recommendations = @user.user_feed(params[:range], params[:instruments], params[:genres])
-    render json: recommendations, each_serializer: RecommendedUserSerializer
+    render json: recommendations.pluck(:id), root: false
   end
 
   def get_user_notifications
