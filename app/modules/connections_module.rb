@@ -72,6 +72,11 @@ module ConnectionsModule
     end
   end
 
+  def similar_tags(user_id)
+    other_user = User.find(user_id)
+    other_user.tags.includes(:users).where(users: { id: id }).pluck(:name)
+  end
+
   private
 
   def request_notification(_receiving_user_id)

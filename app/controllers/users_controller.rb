@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render json: @user
     else
-      render json: @user.errors, status: :unprocessable_entityå
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
@@ -54,32 +54,14 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
-  def get_similar_tags
-    render json: MultiJson.dump(@user.similar_tags(params[:other_user_id]))
-  end
-
   def get_supporting_info
-    similar_tags = @user.similar_tags(params[:other_user_id])
-    instruments = @user.instruments.pluck(:name)
-    genres = @user.genres.pluck(:name)
-    generic_tags = @user.tags.where(tag_type: nil).or(@user.tags.where.not(tag_type: 'spotify_artist'))
-    spotify_tags = @user.tags.where(tag_type: 'spotify_artist')
-
-    info = { similar_tags: similar_tags,
-             instruments: instruments,
-             genres: genres,
-             generic_tags: generic_tags,
-             spotify_tags: spotify_tags }
-    render json: MultiJson.dump(info)
+    other_user = User.find(params[:other_user_id])
+    render json: @user, serializer: SupportingUserInfoSerializer, other_user: other_user
   end
 
   def get_recommended_users
     recommendations = @user.user_feed(params[:range], params[:instruments], params[:genres])
-
-    if recommendations
-      render json: ActiveModel::RecommendedUserSerializer.new(recommendations,
-                                                              each_serializer: RecommendedUserSerializer)
-    end
+    render json: recommendations, each_serializer: RecommendedUserSerializer
   end
 
   def get_user_notifications

@@ -13,13 +13,14 @@
 #
 
 class Tag < ApplicationRecord
-  has_many :usertags, dependent: :destroy
-  has_many :users, through: :usertags
+  has_many :user_tags, dependent: :destroy
+  has_many :users, through: :user_tags
 
   KIND_MAPPINGS = {
     generic: 0,
     genre: 1,
-    instrument: 2
+    instrument: 2,
+    spotify: 3
   }
 
   KIND_LOOKUP = KIND_MAPPINGS.invert
@@ -27,4 +28,5 @@ class Tag < ApplicationRecord
   scope :generic, -> { where(kind: KIND_MAPPINGS[:generic]) }
   scope :genre, -> { where(kind: KIND_MAPPINGS[:genre]) }
   scope :instrument, -> { where(kind: KIND_MAPPINGS[:instrument]) }
+  scope :spotify, -> { where(kind: KIND_MAPPINGS[:spotify]) }
 end
