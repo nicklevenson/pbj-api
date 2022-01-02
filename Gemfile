@@ -38,7 +38,12 @@ gem 'rack-cors'
 # auth
 gem 'cloudinary'
 gem 'jwt'
+gem 'mapbox-sdk', '~> 2.3.0'
 gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-oauth2'
+gem 'omniauth-rails_csrf_protection', '~> 0.1'
 gem 'omniauth-spotify'
 
 # http

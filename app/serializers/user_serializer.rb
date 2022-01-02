@@ -16,8 +16,8 @@ class UserSerializer < ActiveModel::Serializer
     {
       instruments: object.tags.instrument,
       genres: object.tags.genre,
-      generic_tags: object.tags.generic,
-      spotify_tags: object.tags.spotify
+      generic: object.tags.generic,
+      spotify: object.tags.spotify
     }
   end
 end

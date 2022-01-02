@@ -8,23 +8,24 @@ module SpotifyModule
       resp = RestClient.get('https://api.spotify.com/v1/me/top/artists', header)
       items = JSON.parse(resp)['items']
       if items[0]
-        remove_old_spotify_tags
+        # remove_old_spotify_tags
         items.each do |i|
-          name = i['name']
-          tag = Tag.find_or_create_by(name: name)
-          tag.tag_type = 'spotify_artist'
-          tag.image_url = i['images'][0]['url']
-          tag.link = i['href']
-          tag.uri = i['uri']
-          tag.save
-          tags << tag
+          tag_attributes = {
+            name: i['name'],
+            kind: Tag::KIND_MAPPINGS[:spotify],
+            image_url: i['images'][0]['url'],
+            link: i['href'],
+            uri: i['uri']
+          }
+          tag = Tag.find_or_create_by(tag_attributes)
+          tags << tag unless tags.include?(tag)
         end
       end
     end
   end
 
   def remove_old_spotify_tags
-    tags = self.tags.where(tag_type: 'spotify_artist')
+    tags = self.tags.where(kind: Tag::KIND_MAPPINGS[:spotify])
     tags.each do |t|
       self.tags.delete(t)
     end

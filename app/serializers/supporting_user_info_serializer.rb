@@ -14,8 +14,8 @@ class SupportingUserInfoSerializer < ActiveModel::Serializer
       similar_tags: object.similar_tags(@other_user.id),
       instruments: @other_user.tags.instrument,
       genres: @other_user.tags.genre,
-      generic_tags: @other_user.tags.generic,
-      spotify_tags: @other_user.tags.spotify
+      generic: @other_user.tags.generic,
+      spotify: @other_user.tags.spotify
     }
   end
 
