@@ -41,25 +41,6 @@ class User < ApplicationRecord
     RecommendedUsersService.new(user: self, range: range, instruments: instruments, genres: genres).get_recommendation
   end
 
-  # def supporting_info(other_user)
-  #   similar_tags = similar_tags(other_user.id)
-  #   instruments = other_user.tags.instrument
-  #   genres = other_user.tags.genre
-  #   generic_tags = other_user.tags.generic
-  #   spotify_tags = other_user.tags.spotify
-  #   connections = other_user.connected_users
-  #   similar_connections = connections & connected_users
-  #   {
-  #     connections: connections,
-  #     similar_connections: similar_connections,
-  #     similar_tags: similar_tags,
-  #     instruments: instruments,
-  #     genres: genres,
-  #     generic_tags: generic_tags,
-  #     spotify_tags: spotify_tags
-  #   }
-  # end
-
   # nested helpers
   def tags_attributes=(tags_attributes)
     tags.delete_all

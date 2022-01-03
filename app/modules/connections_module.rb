@@ -74,7 +74,7 @@ module ConnectionsModule
 
   def similar_tags(user_id)
     other_user = User.find(user_id)
-    other_user.tags.includes(:users).where(users: { id: id }).pluck(:name)
+    (tags & other_user.tags).pluck(:name)
   end
 
   private
