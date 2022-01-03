@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   end
 
   def get_recommended_users
-    recommendations = @user.user_feed(params[:range], params[:instruments], params[:genres])
+    recommendations = @user.user_feed(params[:range]&.to_i, params[:instruments], params[:genres])
     render json: recommendations.pluck(:id), root: false
   end
 
