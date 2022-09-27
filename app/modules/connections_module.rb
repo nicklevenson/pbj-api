@@ -53,7 +53,7 @@ module ConnectionsModule
     connection = Connection.find_by(receiver_id: id, requestor_id: requesting_user_id)
 
     if connection
-      connection.update(status: Connection::STATUS_MAPPINGS[:accepted])
+      connection.update(status: Connection::STATUS[:accepted])
       accepted_notification(requesting_user_id)
       true
     else
@@ -65,7 +65,7 @@ module ConnectionsModule
     connection = Connection.find_by(receiver_id: id, requestor_id: requesting_user_id)
 
     if connection
-      connection.update(status: Connection::STATUS_MAPPINGS[:rejected])
+      connection.update(status: Connection::STATUS[:rejected])
       true
     else
       false

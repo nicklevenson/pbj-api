@@ -28,7 +28,8 @@ RSpec.describe RecommendedUsersService, type: :service do
       @user2.set_coords_and_location('Beaverton, OR')
       @user3.set_coords_and_location('San Diego')
 
-      result = RecommendedUsersService.new(user: @user1, range: 10).get_recommendation
+      result = RecommendedUsersService.new(user: @user1, range: 10)
+      result.get_recommendation
 
       expect(result).to eq([@user2])
     end
@@ -75,7 +76,7 @@ RSpec.describe RecommendedUsersService, type: :service do
     end
 
     it 'excludes users who are connected' do
-      Connection.create!(requestor: @user1, receiver: @user2, status: Connection::STATUS_MAPPINGS[:accepted])
+      Connection.create!(requestor: @user1, receiver: @user2, status: Connection::STATUS[:accepted])
 
       result = RecommendedUsersService.new(user: @user1).get_recommendation
 
@@ -83,7 +84,7 @@ RSpec.describe RecommendedUsersService, type: :service do
     end
 
     it 'excludes rejected users' do
-      Connection.create!(requestor: @user2, receiver: @user1, status: Connection::STATUS_MAPPINGS[:rejected])
+      Connection.create!(requestor: @user2, receiver: @user1, status: Connection::STATUS[:rejected])
 
       result = RecommendedUsersService.new(user: @user1).get_recommendation
 

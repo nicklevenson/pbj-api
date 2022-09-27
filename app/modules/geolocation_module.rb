@@ -25,9 +25,6 @@ module GeolocationModule
 
   def set_coords_and_location(location_name)
     coords = GeocodingService.find_coords_with_city(location_name)
-    self.location = location_name
-    self.lat = coords[0]
-    self.lng = coords[1]
-    save
+    update(location: location_name, lat: coords[0], lng: coords[1])
   end
 end

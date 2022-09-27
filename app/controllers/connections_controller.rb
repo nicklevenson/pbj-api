@@ -1,5 +1,5 @@
 class ConnectionsController < ApplicationController
-  before_action :set_connection, only: %i[ show update destroy ]
+  before_action :set_connection, only: %i[show update destroy]
 
   # GET /connections
   def index
@@ -39,13 +39,14 @@ class ConnectionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_connection
-      @connection = Connection.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def connection_params
-      params.fetch(:connection, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_connection
+    @connection = Connection.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def connection_params
+    params.fetch(:connection, {})
+  end
 end
