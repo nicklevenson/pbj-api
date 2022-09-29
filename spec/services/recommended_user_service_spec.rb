@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe RecommendedUsersService, type: :service do
-  before do
-    @user1 = create(:user)
-    @user2 = create(:user)
-    @user3 = create(:user)
-  end
-
   describe '#get_recommendation' do
+    before do
+      @user1 = create(:user)
+      @user2 = create(:user)
+      @user3 = create(:user)
+    end
+
     it 'returns a list of users eligible to connect' do
       result = RecommendedUsersService.new(user: @user1).get_recommendation
 
@@ -28,8 +28,7 @@ RSpec.describe RecommendedUsersService, type: :service do
       @user2.set_coords_and_location('Beaverton, OR')
       @user3.set_coords_and_location('San Diego')
 
-      result = RecommendedUsersService.new(user: @user1, range: 10)
-      result.get_recommendation
+      result = RecommendedUsersService.new(user: @user1, range: 10).get_recommendation
 
       expect(result).to eq([@user2])
     end

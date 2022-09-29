@@ -24,14 +24,17 @@ class UsersController < ApplicationController
         u.refresh_token = auth['credentials']['refresh_token']
       end
     end
+
     if user
-      user.login_count = user.login_count + 1
-      # save image whenever its a login - since they can expire
-      user.providerImage = auth['info']['image']
-      user.fetch_spotify_data
-      user.save
+      user.update(
+        login_count: user.login_count + 1,
+        providerImage: auth['info']['image']
+      )
+
+      user.fetch_and_store_spotify_tags
 
       token = encode_token(user_id: user.id)
+
       if user.login_count === 1
         redirect_to('http://localhost:3001/login' + "?token=#{token}" + "?&id=#{user.id}" + '?&new=true')
       else

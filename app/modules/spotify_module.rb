@@ -1,13 +1,8 @@
 module SpotifyModule
-  def fetch_spotify_data
-    if provider === 'spotify'
-      refresh_spotify_token
-      header = {
-        Authorization: "Bearer #{token}"
-      }
-      resp = RestClient.get('https://api.spotify.com/v1/me/top/artists', header)
-      items = JSON.parse(resp)['items']
-      if items[0]
+  def fetch_and_store_spotify_tags
+    if provider == 'spotify'
+      items = fetch_spotify_data
+      if items.present?
         # remove_old_spotify_tags
         items.each do |i|
           tag_attributes = {
@@ -20,15 +15,24 @@ module SpotifyModule
           tag = Tag.find_or_create_by(tag_attributes)
           tags << tag unless tags.include?(tag)
         end
+
+        save
       end
     end
   end
 
+  def fetch_spotify_data
+    refresh_spotify_token
+    header = {
+      Authorization: "Bearer #{token}"
+    }
+    resp = RestClient.get('https://api.spotify.com/v1/me/top/artists', header)
+    JSON.parse(resp)['items']
+  end
+
   def remove_old_spotify_tags
     tags = self.tags.where(kind: Tag::KIND_MAPPINGS[:spotify])
-    tags.each do |t|
-      self.tags.delete(t)
-    end
+    tags.destory_all
   end
 
   def refresh_spotify_token
@@ -41,6 +45,6 @@ module SpotifyModule
 
     resp = RestClient.post('https://accounts.spotify.com/api/token', body)
     json = JSON.parse(resp)
-    self.token = json['access_token']
+    update(token: json['access_token'])
   end
 end
