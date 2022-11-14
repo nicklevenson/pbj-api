@@ -20,8 +20,8 @@ class RecommendedUsersService
     # use cache for this
     wide_selection = User.all
 
-    # users not to be queried (connected and rejected users)
-    exclude_ids = @user.connected_users.ids.push(@user.id) + @user.rejected_connections.pluck(:id)
+    # users not to be queried (connected and rejected users and pending connections)
+    exclude_ids = @user.connected_users.ids.push(@user.id) + @user.rejected_connections.pluck(:id) + @user.pending_connections.pluck(:id)
     @assorted_users = wide_selection.where.not(id: exclude_ids)
   end
 
