@@ -17,10 +17,20 @@ module GeolocationModule
   end
 
   def users_in_range(users, range)
-    users.select do |user|
-      user_distance(user) <= range
-    end
-         .map { |user| user.id }
+    miles_away = range / 2
+
+    west_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'west')
+    east_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'east')
+    north_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'north')
+    south_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'south')
+
+    users.where(
+      'lat > ? AND lat < ? AND lng > ? AND lng < ?',
+      south_most_point[:new_lat],
+      north_most_point[:new_lat],
+      west_most_point[:new_lng],
+      east_most_point[:new_lng]
+    )
   end
 
   def set_coords_and_location(location_name)
