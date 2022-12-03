@@ -63,6 +63,7 @@ class UsersController < ApplicationController
   end
 
   def get_recommended_users
+    puts params
     recommendations = @user.user_feed(params[:range]&.to_i, params[:instruments], params[:genres])
     render json: recommendations.pluck(:id), root: false
   end
@@ -72,7 +73,10 @@ class UsersController < ApplicationController
   end
 
   def request_connection
-    render json: { message: 'Successfully requested' } if @user.request_connection(params[:requested_id])
+    if @user.request_connection(params[:requested_id])
+      other_user = User.find(params[:requested_id])
+      render json: @user, serializer: SupportingUserInfoSerializer, other_user: other_user
+    end
   end
 
   def accept_connection
