@@ -17,19 +17,23 @@ module GeolocationModule
   end
 
   def users_in_range(users, range)
-    miles_away = range / 2
+    miles_away = range
 
-    west_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'west')
-    east_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'east')
-    north_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'north')
-    south_most_point = GeocodingService.get_directional_coordinates(lat.to_f, lng.to_f, miles_away.to_f, 'south')
+    north_west_most_point = GeocodingService.get_directional_coordinates(lat, lng, miles_away,
+                                                                         'north west')
+    north_east_most_point = GeocodingService.get_directional_coordinates(lat, lng, miles_away,
+                                                                         'north east')
+    south_west_most_point = GeocodingService.get_directional_coordinates(lat, lng, miles_away,
+                                                                         'south west')
+    south_east_most_point = GeocodingService.get_directional_coordinates(lat, lng, miles_away,
+                                                                         'south east')
 
     users.where(
-      'lat > ? AND lat < ? AND lng > ? AND lng < ?',
-      south_most_point[:new_lat],
-      north_most_point[:new_lat],
-      west_most_point[:new_lng],
-      east_most_point[:new_lng]
+      'lat >= ? AND lat <= ? AND lng >= ? AND lng <= ?',
+      south_west_most_point[:new_lat],
+      north_west_most_point[:new_lat],
+      south_west_most_point[:new_lng],
+      south_east_most_point[:new_lng]
     )
   end
 

@@ -16,17 +16,17 @@ class GeocodingService
 
   def self.get_directional_coordinates(lat, lng, miles_away, direction)
     case direction
-    when 'west'
-      bearing = 270
+    when 'north west'
+      bearing = 315
       calculate_destination_point(lat, lng, miles_away, bearing)
-    when 'east'
-      bearing = 90
+    when 'north east'
+      bearing = 45
       calculate_destination_point(lat, lng, miles_away, bearing)
-    when 'north'
-      bearing = 0
+    when 'south west'
+      bearing = 225
       calculate_destination_point(lat, lng, miles_away, bearing)
-    when 'south'
-      bearing = 180
+    when 'south east'
+      bearing = 135
       calculate_destination_point(lat, lng, miles_away, bearing)
     end
   end
