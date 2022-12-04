@@ -1,4 +1,14 @@
 module GeolocationModule
+  def users_in_range(users, range)
+    approximate_ranged_users = users_in_approximate_range(users, range)
+    # only query precisely if below 10000 records
+    if approximate_ranged_users.length < 10_000
+      approximate_ranged_users
+    else
+      users_in_precise_range(approximate_ranged_users, range)
+    end
+  end
+
   def user_distance(other_user)
     if lat && lng && other_user.lat && other_user.lng
       lat1 = other_user.lat
@@ -16,8 +26,18 @@ module GeolocationModule
     user_distance(other_user) <= range
   end
 
-  def users_in_range(users, range)
-    miles_away = range
+  # less efficient, but precise range query based on radial calculation from center
+  def users_in_precise_range(users, range)
+    users.select do |other_user|
+      is_in_range(other_user, range)
+    end
+  end
+
+  # quick approximate query based on a rectangular border bounds
+  # increase requested range to cast a slightly larger net to be reduced later
+  def users_in_approximate_range(users, range)
+    hypotenuse_miles_away = Math.sqrt((range**2) + (range**2))
+    miles_away = hypotenuse_miles_away
 
     north_west_most_point = GeocodingService.get_directional_coordinates(lat, lng, miles_away,
                                                                          'north west')
