@@ -34,7 +34,7 @@ module GeolocationModule
   end
 
   # quick approximate query based on a rectangular border bounds
-  # increase requested range to cast a slightly larger net to be reduced later
+  # increases requested range to cast rectangle that would fit the radial circle
   def users_in_approximate_range(users, range)
     hypotenuse_miles_away = Math.sqrt((range**2) + (range**2))
     miles_away = hypotenuse_miles_away

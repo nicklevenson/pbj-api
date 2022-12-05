@@ -20,9 +20,7 @@ Rails.application.routes.draw do
 
   post 'notifications/make_read', to: 'notifications#make_read'
 
-  get 'lists/get-instruments', to: 'lists#get_instruments'
-  get 'lists/get-genres', to: 'lists#get_genres'
-  get 'lists/get-cities', to: 'lists#get_cities'
+  get 'tags/instruments_and_genres', to: 'tags#instruments_and_genres'
 
   resources :messages
   resources :posts
