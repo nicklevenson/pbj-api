@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2023_01_16_174230) do
     t.integer "chatroom_id"
     t.integer "user_id"
     t.text "content"
+    t.datetime "read_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
