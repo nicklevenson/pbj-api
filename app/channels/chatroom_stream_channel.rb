@@ -3,9 +3,7 @@ class ChatroomStreamChannel < ApplicationCable::Channel
     id = params[:id]
     stream_from "chatroom_stream_#{id}"
     user = User.find(id)
-    chatrooms = user.chatrooms.map do |chatroom|
-      ChatroomsSerializer.new(chatroom, current_user: user).serializable_hash
-    end
+    chatrooms = Chatroom.serializable_stream(user.chatrooms)
     ActionCable.server.broadcast("chatroom_stream_#{id}", chatrooms)
   end
 

@@ -22,8 +22,11 @@ class Message < ApplicationRecord
   private
 
   def stream_to_cable
-    chatrooms = MultiJson.dump(user.chatrooms, include: %i[users messages])
-    ActionCable.server.broadcast("chatroom_stream_#{user_id}", chatrooms)
+    current_user_chatrooms = Chatroom.serializable_stream(user.chatrooms)
+    other_user = chatroom.users.where.not(id: user.id).first
+    other_user_chatrooms = Chatroom.serializable_stream(other_user.chatrooms)
+    ActionCable.server.broadcast("chatroom_stream_#{user_id}", current_user_chatrooms)
+    ActionCable.server.broadcast("chatroom_stream_#{other_user.id}", other_user_chatrooms)
   end
 
   def message_notification
