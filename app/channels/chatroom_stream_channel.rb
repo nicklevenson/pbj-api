@@ -3,7 +3,7 @@ class ChatroomStreamChannel < ApplicationCable::Channel
     id = params[:id]
     stream_from "chatroom_stream_#{id}"
     user = User.find(id)
-    chatrooms = Chatroom.serializable_stream(user.chatrooms)
+    chatrooms = Chatroom.serializable_stream(user)
     ActionCable.server.broadcast("chatroom_stream_#{id}", chatrooms)
   end
 

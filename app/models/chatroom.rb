@@ -12,8 +12,8 @@ class Chatroom < ApplicationRecord
   has_many :user_chatrooms
   has_many :users, through: :user_chatrooms
 
-  def self.serializable_stream(chatrooms)
-    chatrooms = chatrooms.map do |chatroom|
+  def self.serializable_stream(user)
+    chatrooms = user.chatrooms.map do |chatroom|
       ChatroomsSerializer.new(chatroom, current_user: user).serializable_hash
     end
   end
