@@ -1,5 +1,5 @@
 class SupportingUserInfoSerializer < ActiveModel::Serializer
-  attributes :info, :tags, :connections
+  attributes :info, :tags, :connections, :distance
   def initialize(*args)
     super
     @other_user = @options[:other_user]
@@ -26,5 +26,9 @@ class SupportingUserInfoSerializer < ActiveModel::Serializer
       connected_users: connected_users,
       similar_connections: similar_connections
     }
+  end
+
+  def distance
+    object.user_distance(@other_user).to_i
   end
 end
