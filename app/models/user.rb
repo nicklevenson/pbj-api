@@ -33,6 +33,10 @@ class User < ApplicationRecord
   has_many :requestor_connections, foreign_key: :requestor_id, class_name: :Connection
   has_many :receiver_connections, foreign_key: :receiver_id, class_name: :Connection
 
+  has_many :messages
+  has_many :user_chatrooms
+  has_many :chatrooms, through: :user_chatrooms
+
   validates :username, :email, presence: true
 
   after_create :new_user_notification

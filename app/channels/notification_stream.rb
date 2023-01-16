@@ -1,4 +1,4 @@
-class NotificationStream < ApplicationCable::Channel
+class NotificationStreamChannel < ApplicationCable::Channel
   def subscribed
     stream_from "notification_stream_#{params[:id]}"
     user = User.find(params[:id])

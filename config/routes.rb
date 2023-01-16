@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   get 'tags/instruments_and_genres', to: 'tags#instruments_and_genres'
 
   mount ActionCable.server => '/notification_stream'
+  mount ActionCable.server => '/chatroom_stream'
 
   resources :messages
   resources :posts
