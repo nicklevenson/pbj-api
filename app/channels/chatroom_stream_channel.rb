@@ -17,6 +17,15 @@ class ChatroomStreamChannel < ApplicationCable::Channel
     )
   end
 
+  def mark_read(data)
+    id = params[:id]
+    user = User.find(id)
+    chatroom = Chatroom.find(data['chatroom_id'])
+    chatroom.messages.where.not(user: user).unread.update_all(read_at: Time.zone.now)
+    chatrooms = Chatroom.serializable_stream(user)
+    ActionCable.server.broadcast("chatroom_stream_#{id}", chatrooms)
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end

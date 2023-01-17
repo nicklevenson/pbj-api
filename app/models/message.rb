@@ -32,4 +32,6 @@ class Message < ApplicationRecord
   def message_notification
     # MessagingNotificationJob.set(wait: 30.minutes).perform_later(self)
   end
+
+  scope :unread, -> {where(read_at: nil)}
 end
