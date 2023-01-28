@@ -2,7 +2,7 @@ module GeolocationModule
   def users_in_range(users, range)
     approximate_ranged_users = users_in_approximate_range(users, range)
     # only query precisely if below 10000 records
-    if approximate_ranged_users.length < 10_000
+    if approximate_ranged_users.length > 10_000
       approximate_ranged_users
     else
       users_in_precise_range(approximate_ranged_users, range)
