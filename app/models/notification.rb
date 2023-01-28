@@ -21,6 +21,8 @@ class Notification < ApplicationRecord
     Notification.where(id: ids).update_all(read: true)
   end
 
+  scope :order_by_read, -> { order(:read).order('created_at desc') }
+
   private
 
   def user_email
@@ -29,6 +31,9 @@ class Notification < ApplicationRecord
   end
 
   def stream_to_cable
-    ActionCable.server.broadcast("notification_stream_#{user_id}", user.notifications)
+    notifications = user.notifications.order_by_read.map do |notification|
+      NotificationSerializer.new(notification, current_user: user)
+    end
+    ActionCable.server.broadcast("notification_stream_#{user_id}", notifications)
   end
 end

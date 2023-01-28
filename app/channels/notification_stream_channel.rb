@@ -2,7 +2,7 @@ class NotificationStreamChannel < ApplicationCable::Channel
   def subscribed
     stream_from "notification_stream_#{params[:id]}"
     user = User.find(params[:id])
-    notifications = user.notifications.map do |notification|
+    notifications = user.notifications.order_by_read.map do |notification|
       NotificationSerializer.new(notification, current_user: user)
     end
     ActionCable.server.broadcast("notification_stream_#{user.id}", notifications)
@@ -13,7 +13,7 @@ class NotificationStreamChannel < ApplicationCable::Channel
     user = User.find(id)
     notification = user.notifications.find(data['notification_id'])
     notification.update!(read: true)
-    notifications = user.notifications.map do |notification|
+    notifications = user.notifications.order_by_read.map do |notification|
       NotificationSerializer.new(notification, current_user: user)
     end
 
