@@ -45,6 +45,6 @@ class SupportingUserInfoSerializer < ActiveModel::Serializer
   end
 
   def chatroom_id
-    object.chatrooms.includes(:user_chatrooms).where('user_chatrooms.user_id = ?', @other_user.id)&.first
+    object.chatrooms.where(id: @other_user.chatrooms.pluck(:id))&.first&.id
   end
 end
