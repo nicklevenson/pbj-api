@@ -55,6 +55,7 @@ module ConnectionsModule
     if connection
       connection.update(status: Connection::STATUS[:accepted])
       accepted_notification(requesting_user_id)
+      create_chatroom(requesting_user_id)
       true
     else
       false
@@ -79,14 +80,22 @@ module ConnectionsModule
 
   private
 
-  def request_notification(_receiving_user_id)
-    User.find(_receiving_user_id).notifications << Notification.create(content: 'has requested to connect with you',
-                                                                       involved_user_id: id)
+  def request_notification(receiving_user_id)
+    User.find(receiving_user_id).notifications << Notification.create(content: 'has requested to connect with you',
+                                                                      involved_user_id: id)
   end
 
-  def accepted_notification(_requesting_user_id)
-    requested_user = User.find(_requesting_user_id)
+  def accepted_notification(requesting_user_id)
+    requested_user = User.find(requesting_user_id)
     requested_user.notifications << Notification.create(content: 'has accepted your connection request',
                                                         involved_user_id: id)
+  end
+
+  def create_chatroom(requesting_user_id)
+    requested_user = User.find(requesting_user_id)
+    chatroom = chatrooms.build
+    chatroom.users << self
+    chatroom.users << requested_user
+    chatroom.save!
   end
 end

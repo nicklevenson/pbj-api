@@ -1,5 +1,5 @@
 class SupportingUserInfoSerializer < ActiveModel::Serializer
-  attributes :info, :tags, :connections, :distance
+  attributes :info, :tags, :connections, :distance, :connection_status, :chatroom_id
   def initialize(*args)
     super
     @other_user = @options[:other_user]
@@ -19,6 +19,18 @@ class SupportingUserInfoSerializer < ActiveModel::Serializer
     }
   end
 
+  def connection_status
+    if object.connected_users.find_by(id: @other_user.id)
+      'connected'
+    elsif object.incoming_connections.find_by(id: @other_user.id)
+      'incoming request'
+    elsif object.pending_connections.find_by(id: @other_user.id)
+      'pending'
+    else
+      'unconnected'
+    end
+  end
+
   def connections
     connected_users = @other_user.connected_users
     similar_connections = connected_users & object.connected_users
@@ -30,5 +42,9 @@ class SupportingUserInfoSerializer < ActiveModel::Serializer
 
   def distance
     object.user_distance(@other_user).to_i
+  end
+
+  def chatroom_id
+    object.chatrooms.includes(:user_chatrooms).where('user_chatrooms.user_id = ?', @other_user.id)&.first
   end
 end
