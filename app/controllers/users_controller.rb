@@ -1,15 +1,7 @@
 class UsersController < ApplicationController
   # before_action :authorized, except: %i[index create show unsubscribe_to_email]
-  before_action :set_user, except: %i[index create]
+  before_action :set_user, except: %i[create]
 
-  # GET /users
-  def index
-    @users = User.all
-
-    render json: @users
-  end
-
-  # GET /users/1
   def show
     render json: @user, root: false
   end
@@ -41,20 +33,6 @@ class UsersController < ApplicationController
         redirect_to('http://localhost:3001/login' + "?token=#{token}" + "?&id=#{user.id}")
       end
     end
-  end
-
-  # PATCH/PUT /users/1
-  def update
-    if @user.update(user_params)
-      render json: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /users/1
-  def destroy
-    @user.destroy
   end
 
   def get_supporting_info
@@ -111,6 +89,19 @@ class UsersController < ApplicationController
     @user.email_subscribe = false
     @user.save
     redirect_to('http://localhost:3001/unsubscribed')
+  end
+
+  def update_tag
+    if params[:update_type] == 'add'
+      tag = Tag.find_or_create_by(name: params[:name], kind: Tag::KIND_MAPPINGS[params[:kind].to_sym])
+      @user.tags << tag unless @user.tags.include?(tag)
+      @user.save
+    elsif params[:update_type] == 'remove'
+      @user.tags.delete(Tag.find_by(name: params[:name], kind: Tag::KIND_MAPPINGS[params[:kind].to_sym]))
+      @user.save
+    end
+
+    render json: @user, root: false
   end
 
   private

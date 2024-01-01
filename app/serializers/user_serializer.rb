@@ -3,12 +3,9 @@ class UserSerializer < ActiveModel::Serializer
 
   def connections
     {
-      "connected_users": ActiveModel::ArraySerializer.new(object.connected_users.includes(:tags), each_serializer: UserSerializer,
-                                                                                                  except: %i[connections user_feed]),
-      "pending_connections": ActiveModel::ArraySerializer.new(object.pending_connections.includes(:tags), each_serializer: UserSerializer,
-                                                                                                          except: %i[connections user_feed]),
-      "incoming_connections": ActiveModel::ArraySerializer.new(object.incoming_connections.includes(:tags), each_serializer: UserSerializer,
-                                                                                                            except: %i[connections user_feed])
+      "connected_users": connected_users,
+      "pending_connections": pending_connections,
+      "incoming_connections": incoming_connections
     }
   end
 
@@ -19,5 +16,23 @@ class UserSerializer < ActiveModel::Serializer
       generic: object.tags.generic,
       spotify: object.tags.spotify
     }
+  end
+
+  def connected_users
+    object.connected_users.map do |user|
+      SupportingUserInfoSerializer.new(object, other_user: user).serializable_hash
+    end
+  end
+
+  def pending_connections
+    object.pending_connections.map do |user|
+      SupportingUserInfoSerializer.new(object, other_user: user).serializable_hash
+    end
+  end
+
+  def incoming_connections
+    object.incoming_connections.map do |user|
+      SupportingUserInfoSerializer.new(object, other_user: user).serializable_hash
+    end
   end
 end

@@ -1,11 +1,13 @@
 class TagsController < ApplicationController
-  def instruments_and_genres
+  def index
     instruments = Tag.instrument.pluck(:name)
     genres = Tag.genre.pluck(:name)
+    generic = Tag.generic.pluck(:name)
 
     render json: {
       instruments: instruments,
-      genres: genres
+      genres: genres,
+      generic: generic
     }
   end
 end
