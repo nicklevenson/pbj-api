@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :bio, :location, :photo, :login_count, :providerImage, :connections, :tags
+  attributes :id, :email, :username, :bio, :location, :photo, :login_count, :providerImage, :connections, :tags, :social_links
 
   def connections
     {

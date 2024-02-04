@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get '/authenticate-spotify', to: 'sessions#authenticate_spotify'
   get 'auth/:provider/callback', to: 'users#create'
 
+  patch 'users/:id', to: 'users#update'
   get 'users/:id/connected_users', to: 'users#get_connected_users'
   get 'users/:id/recommended_users', to: 'users#get_recommended_users'
   get 'users/:id/incoming_requests', to: 'users#get_incoming_requests'

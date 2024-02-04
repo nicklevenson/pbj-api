@@ -29,6 +29,7 @@ class User < ApplicationRecord
   has_many :tags, through: :user_tags
   has_many :notifications, dependent: :destroy
   has_many :social_links
+  accepts_nested_attributes_for :social_links
 
   has_many :requestor_connections, foreign_key: :requestor_id, class_name: :Connection
   has_many :receiver_connections, foreign_key: :receiver_id, class_name: :Connection

@@ -11,5 +11,9 @@
 #
 
 class SocialLink < ApplicationRecord
+  self.inheritance_column = nil
+
   belongs_to :user
+
+  enum type: %i[spotify soundcloud bandcamp instagram apple_music]
 end

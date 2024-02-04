@@ -35,6 +35,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    if @user.update(user_params)
+      render json: { success: true }, root: false
+    else
+      render json: { success: false, errors: @user.errors }, status: :unprocessable_entity
+    end
+  end
+
   def get_supporting_info
     other_user = User.find(params[:other_user_id])
     render json: @user, serializer: SupportingUserInfoSerializer, other_user: other_user
@@ -70,18 +78,17 @@ class UsersController < ApplicationController
 
   def upload_photo
     req = Cloudinary::Uploader.upload(
-      params[:photo],
-      public_id: @user.id + @user.uid.to_i,
-      crop: :fill, width: 500, height: 500,
-      format: 'jpg',
-      gravity: :face
-    )
-    if req['url']
-      @user.photo = req['url']
+      params[:photo], 
+      public_id: @user.id + @user.uid.to_i, 
+      :crop => :fill, :width => 500, :height => 500, 
+      format: 'jpg', 
+      :gravity => :face)
+    if req["url"]
+      @user.photo = req["url"]
       @user.save
-      render json: { message: 'Successful upload' }
+      render json: {message: "Successful upload"}
     else
-      render json: { message: 'Bad Upload' }, status: :unprocessable_entity
+      render json: {message: "Bad Upload"}, status: :unprocessable_entity
     end
   end
 
@@ -117,7 +124,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :email, :username,
       :bio, :location, :lat, :lng,
-      :spotify_link, :soundcloud_link, :bandcamp_link, :youtube_link, :apple_music_link, :instagram_link,
+      social_links_attributes: %i[type url],
       tags_attributes: %i[name tag_type uri image_url link],
       genres_attributes: [:name], instruments_attributes: [:name]
     )
