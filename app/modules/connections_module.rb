@@ -43,7 +43,7 @@ module ConnectionsModule
     if connection
       false
     else
-      Connection.create(receiver_id: receiving_user_id, requestor_id: id)
+      Connection.create!(receiver_id: receiving_user_id, requestor_id: id)
       request_notification(receiving_user_id)
       true
     end
@@ -81,21 +81,19 @@ module ConnectionsModule
   private
 
   def request_notification(receiving_user_id)
-    User.find(receiving_user_id).notifications << Notification.create(content: 'has requested to connect with you',
-                                                                      involved_user_id: id)
+    Notification.create!(content: 'has sent you a connection request', involved_user_id: id, user_id: receiving_user_id)
   end
 
   def accepted_notification(requesting_user_id)
     requested_user = User.find(requesting_user_id)
-    requested_user.notifications << Notification.create(content: 'has accepted your connection request',
-                                                        involved_user_id: id)
+    Notification.create!(content: 'has accepted your connection request', involved_user_id: id, user_id: requesting_user_id)
   end
 
   def create_chatroom(requesting_user_id)
     requested_user = User.find(requesting_user_id)
-    chatroom = chatrooms.build
+    chatroom = chatrooms.new
     chatroom.users << self
     chatroom.users << requested_user
-    chatroom.save!
+    chatroom.save!    
   end
 end
