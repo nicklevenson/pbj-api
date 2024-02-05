@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   def encode_token(user_id)
-    JWT.encode(user_id, Rails.application.credentials.jwt[:secret])
+    payload = {
+      user_id: user_id,
+      exp: 7.days.from_now.to_i
+    }
+    JWT.encode(payload, Rails.application.credentials.jwt[:secret])
   end
 
   def decode_token(token)
@@ -28,7 +32,7 @@ class ApplicationController < ActionController::API
 
   def current_user
     if decoded_token
-      user_id = decoded_token[0]['user_id']
+      user_id = decoded_token[0]['user_id']['user_id']
       user = User.find_by(id: user_id)
     end
   end
