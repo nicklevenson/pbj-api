@@ -22,11 +22,12 @@ class Message < ApplicationRecord
   private
 
   def stream_to_cable
+    user.reload
     current_user_chatrooms = Chatroom.serializable_stream(user)
     other_user = chatroom.users.where.not(id: user.id).first
     other_user_chatrooms = Chatroom.serializable_stream(other_user)
-    ActionCable.server.broadcast("chatroom_stream_#{user_id}", current_user_chatrooms)
     ActionCable.server.broadcast("chatroom_stream_#{other_user.id}", other_user_chatrooms)
+    ActionCable.server.broadcast("chatroom_stream_#{user_id}", current_user_chatrooms)
   end
 
   def message_notification
