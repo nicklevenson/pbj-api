@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :bio, :location, :photo, :login_count, :providerImage, :connections, :tags, :social_links
-
+  attributes :id, :email, :username, :bio, :location, :photo, :login_count, :connections, :tags, :social_links, :needs_welcome_step
+  
   def connections
     {
       "connected_users": connected_users,
@@ -34,5 +34,9 @@ class UserSerializer < ActiveModel::Serializer
     object.incoming_connections.map do |user|
       SupportingUserInfoSerializer.new(object, other_user: user).serializable_hash
     end
+  end
+
+  def needs_welcome_step
+    (object.photo.nil? || object.tags.empty?)
   end
 end
