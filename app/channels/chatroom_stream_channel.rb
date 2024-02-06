@@ -9,7 +9,7 @@ class ChatroomStreamChannel < ApplicationCable::Channel
   def new_message(data)
     chatroom = Chatroom.find(data['chatroom_id'])
 
-    chatroom.messages.create!(
+    chatroom.reload.messages.create!(
       user: current_user,
       content: data['content']
     )
@@ -17,7 +17,7 @@ class ChatroomStreamChannel < ApplicationCable::Channel
 
   def mark_read(data)
     chatroom = Chatroom.find(data['chatroom_id'])
-    chatroom.messages.where.not(user: current_user).unread.update_all(read_at: Time.zone.now)
+    chatroom.reload.messages.where.not(user: current_user).unread.update_all(read_at: Time.zone.now)
     chatrooms = Chatroom.serializable_stream(current_user)
     ActionCable.server.broadcast("chatroom_stream_#{current_user.id}", chatrooms)
   end
