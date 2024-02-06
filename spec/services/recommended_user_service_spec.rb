@@ -6,6 +6,7 @@ RSpec.describe RecommendedUsersService, type: :service do
       @user1 = create(:user)
       @user2 = create(:user)
       @user3 = create(:user)
+      create(:user, :incognito)
     end
 
     it 'returns a list of users eligible to connect' do

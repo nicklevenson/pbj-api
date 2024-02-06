@@ -19,6 +19,7 @@
 #  login_count     :integer          default("0")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  incognito       :boolean          default("false")
 #
 
 require 'rails_helper'

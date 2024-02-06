@@ -19,6 +19,7 @@
 #  login_count     :integer          default("0")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  incognito       :boolean          default("false")
 #
 
 class User < ApplicationRecord
@@ -55,6 +56,8 @@ class User < ApplicationRecord
       tags << tag unless tags.include?(tag)
     end
   end
+
+  scope :not_incognito, -> { where(incognito: false) }
 
   private
 
