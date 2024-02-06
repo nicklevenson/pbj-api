@@ -14,7 +14,7 @@ class Chatroom < ApplicationRecord
   after_save :stream_to_cable
 
   def self.serializable_stream(user)
-    chatrooms = user.chatrooms.map do |chatroom|
+    chatrooms = user.reload.chatrooms.map do |chatroom|
       ChatroomsSerializer.new(chatroom, current_user: user).serializable_hash
     end
   end
