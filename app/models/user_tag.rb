@@ -2,7 +2,7 @@
 #
 # Table name: user_tags
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  user_id    :integer
 #  tag_id     :integer
 #  created_at :datetime         not null

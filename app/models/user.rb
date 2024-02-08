@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
+#  id              :bigint           not null, primary key
 #  username        :string
 #  email           :string
 #  photo           :string
@@ -15,11 +15,11 @@
 #  refresh_token   :string
 #  lng             :decimal(10, 6)
 #  lat             :decimal(10, 6)
-#  email_subscribe :boolean          default("true")
-#  login_count     :integer          default("0")
+#  email_subscribe :boolean          default(TRUE)
+#  login_count     :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  incognito       :boolean          default("false")
+#  incognito       :boolean          default(FALSE)
 #
 
 class User < ApplicationRecord

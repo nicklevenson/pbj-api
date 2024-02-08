@@ -2,7 +2,7 @@
 #
 # Table name: messages
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  chatroom_id :integer
 #  user_id     :integer
 #  content     :text
