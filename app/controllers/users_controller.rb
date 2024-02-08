@@ -80,7 +80,7 @@ class UsersController < ApplicationController
     req = Cloudinary::Uploader.upload(
       params[:photo], 
       public_id: @user.id + @user.uid.to_i, 
-      :crop => :fill, :width => 200, :height => 200, 
+      :crop => :fill, :width => 500, :height => 500, 
       format: 'jpg', 
       :gravity => :face)
     if req["url"]
