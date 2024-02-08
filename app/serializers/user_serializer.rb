@@ -60,6 +60,6 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def needs_welcome_step
-    (object.photo.nil? || object.tags.empty?)
+    (object.photo.nil? || object.tags.empty? || object.lat.nil? || object.lng.nil? || object.lng.nil?)
   end
 end
