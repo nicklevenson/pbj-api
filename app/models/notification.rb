@@ -2,10 +2,10 @@
 #
 # Table name: notifications
 #
-#  id               :integer          not null, primary key
+#  id               :bigint           not null, primary key
 #  user_id          :integer
 #  content          :string
-#  read             :boolean          default("false")
+#  read             :boolean          default(FALSE)
 #  involved_user_id :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null

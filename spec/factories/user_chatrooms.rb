@@ -2,7 +2,7 @@
 #
 # Table name: user_chatrooms
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  chatroom_id :integer
 #  user_id     :integer
 #  created_at  :datetime         not null

@@ -2,8 +2,8 @@
 #
 # Table name: tags
 #
-#  id         :integer          not null, primary key
-#  kind       :integer          default("0")
+#  id         :bigint           not null, primary key
+#  kind       :integer          default(0)
 #  name       :string
 #  image_url  :string
 #  link       :string

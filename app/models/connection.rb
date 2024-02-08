@@ -2,10 +2,10 @@
 #
 # Table name: connections
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
 #  requestor_id :integer
 #  receiver_id  :integer
-#  status       :integer          default("0")
+#  status       :integer          default(0)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
