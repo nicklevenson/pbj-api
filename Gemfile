@@ -12,6 +12,11 @@ gem 'pg', '~> 1.5.4'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 5.0'
 
+# redis
+
+# Use Redis adapter to run Action Cable in production
+gem 'redis', '~> 4.2'
+
 gem 'active_model_serializers', '~> 0.8.0'
 
 # Use Redis adapter to run Action Cable in production
