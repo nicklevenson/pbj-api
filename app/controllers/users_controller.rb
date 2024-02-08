@@ -28,9 +28,9 @@ class UsersController < ApplicationController
       token = encode_token(user_id: user.id)
 
       if user.login_count === 1
-        redirect_to('http://localhost:3001/login' + "?token=#{token}" + "?&id=#{user.id}" + '?&new=true')
+        redirect_to("#{Rails.application.credentials.client_url}/login" + "?token=#{token}" + "?&id=#{user.id}" + '?&new=true', allow_other_host: true)
       else
-        redirect_to('http://localhost:3001/login' + "?token=#{token}" + "?&id=#{user.id}")
+        redirect_to("#{Rails.application.credentials.client_url}/login" + "?token=#{token}" + "?&id=#{user.id}", allow_other_host: true)
       end
     end
   end
@@ -95,7 +95,7 @@ class UsersController < ApplicationController
   def unsubscribe_to_email
     @user.email_subscribe = false
     @user.save
-    redirect_to('http://localhost:3001/unsubscribed')
+    redirect_to "#{Rails.application.credentials.client_url}/unsubscribe", allow_other_host: true
   end
 
   def update_tag
