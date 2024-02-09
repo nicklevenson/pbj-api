@@ -123,7 +123,7 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(
       :email, :username,
-      :bio, :location, :lat, :lng,
+      :bio, :location, :lat, :lng, :incognito,
       social_links_attributes: %i[type url],
       tags_attributes: %i[name tag_type uri image_url link],
       genres_attributes: [:name], instruments_attributes: [:name]

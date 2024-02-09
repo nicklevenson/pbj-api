@@ -22,7 +22,7 @@
 #  incognito       :boolean          default(FALSE)
 #
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :bio, :location, :photo, :login_count, :connections, :tags, :social_links, :needs_welcome_step
+  attributes :id, :email, :username, :bio, :location, :photo, :login_count, :connections, :tags, :social_links, :needs_welcome_step, :incognito
   
   def connections
     {
