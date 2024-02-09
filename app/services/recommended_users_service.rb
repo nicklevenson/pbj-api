@@ -18,7 +18,7 @@ class RecommendedUsersService
 
   def base_selection
     # use cache for this
-    wide_selection = User.not_incognito
+    wide_selection = User.recommendable
 
     # users not to be queried (connected and rejected users and pending connections)
     exclude_ids = @user.connected_users.ids.push(@user.id) + @user.rejected_connections.pluck(:id) + @user.pending_connections.pluck(:id)

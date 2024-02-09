@@ -44,6 +44,7 @@ class User < ApplicationRecord
   after_create :new_user_notification
 
   def user_feed(range = nil, instruments = nil, genres = nil)
+    range = nil if range >= 500
     RecommendedUsersService.new(user: self, range: range, instruments: instruments, genres: genres).get_recommendation
   end
 
@@ -57,6 +58,7 @@ class User < ApplicationRecord
     end
   end
 
+  scope :recommendable, -> { where.not(lat: nil).where.not(lng: nil).not_incognito }
   scope :not_incognito, -> { where(incognito: false) }
 
   private
