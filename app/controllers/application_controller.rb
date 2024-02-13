@@ -7,10 +7,6 @@ class ApplicationController < ActionController::API
     JWT.encode(payload, Rails.application.credentials.jwt[:secret])
   end
 
-  def decode_token(token)
-    JWT.decode(token, Rails.application.credentials.jwt[:secret])[0]
-  end
-
   def auth_header
     request.headers['Authorization']
   end

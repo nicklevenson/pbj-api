@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  # before_action :authorized, except: %i[index create show unsubscribe_to_email]
+  before_action :authorized, except: %i[create unsubscribe_to_email]
   before_action :set_user, except: %i[create]
 
   def show

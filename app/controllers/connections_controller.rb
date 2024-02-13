@@ -1,4 +1,5 @@
 class ConnectionsController < ApplicationController
+  before_action :authorized
   before_action :set_connection, only: %i[show update destroy]
 
   # GET /connections
